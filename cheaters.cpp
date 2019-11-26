@@ -31,20 +31,18 @@ int getdir (string dir, vector<string> &files)
 void getletters(const char *fName, vector<char>& letter, int num){
   string line;
   ifstream myfile (fName);
-  vector<string> queue;
   if(myfile.is_open()){
-    while(getline(myfile, line) && line != "<br><br><b>Bibliography</b><br><br>"){
+    while(getline(myfile, line)){
       cout << line<< endl;
         const char *letters = line.c_str();
         for(int i = 0; letters[i] != '\0'; i++){
-          if('A' <= letters[i] && letters[i] <= 'Z' ){
+          if('A' <= letters[i] && letters[i] <= 'Z' ||letters[i] == ' ' || letters[i] == '\n' ){
             letter.push_back(letters[i]);
           }
           if('a' <= letters[i] && letters[i] <= 'z' ){
             letter.push_back(letters[i] - 32);
           }
         }
-        queue.push_back(line);
     }
   }
 }
@@ -57,6 +55,7 @@ int main(int argc, char *argv[])
     vector<string> files = vector<string>();
     vector<char> letters;
     vector<string> words;
+    vector<string> key;
 
     getdir(dir,files);
 
@@ -72,16 +71,35 @@ int main(int argc, char *argv[])
     // }
     // cout << endl;
     vector<char>::iterator it = letters.begin();
-    while (letters.size() >= N_WORDS){
-      string s;
-      for(int i = 0; i < N_WORDS; i++){
-        s = s + letters[i];
+    while(*it){
+      if(*it == ' ' || *it == '\n'){
+        it++;
       }
-      words.push_back(s);
-      letters.erase(letters.begin());
+      else{
+        string s;
+        while(*it != ' ' && *it != '\n'){
+          s = s + *it;
+          it++;
+        }
+        words.push_back(s);
+      }
+      it++;
     }
+
     for (unsigned int i = 0; i < words.size();i++) {
         cout << i <<". " << words[i] << endl;
+    }
+    while (words.size() >= N_WORDS){
+      string s;
+      for(int i = 0; i < N_WORDS; i++){
+        s = s + words[i];
+      }
+      key.push_back(s);
+      words.erase(words.begin());
+    }
+    //
+    for (unsigned int i = 0; i < key.size();i++) {
+        cout << i <<". " << key[i] << endl;
     }
 
 
