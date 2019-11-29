@@ -28,23 +28,27 @@ int getdir (string dir, vector<string> &files)
 }
 
 
-void getletters(const char *fName, vector<char>& letter, int num){
+void getletters(const char *fName, vector<char>& queue, int num){
   string line;
   ifstream myfile (fName);
   if(myfile.is_open()){
     while(getline(myfile, line)){
-      cout << line<< endl;
-        const char *letters = line.c_str();
-        for(int i = 0; letters[i] != '\0'; i++){
-          if('A' <= letters[i] && letters[i] <= 'Z' ||letters[i] == ' ' || letters[i] == '\n' ){
-            letter.push_back(letters[i]);
-          }
-          if('a' <= letters[i] && letters[i] <= 'z' ){
-            letter.push_back(letters[i] - 32);
-          }
+      const char *letters = line.c_str();
+      for(int i = 0; letters[i] != '\0'; i++){
+        if(('A' <= letters[i] && letters[i] <= 'Z') || letters[i] == ' ' ){
+          queue.push_back(letters[i]);
         }
+        if('a' <= letters[i] && letters[i] <= 'z' ){
+          queue.push_back(letters[i] - 32);
+        }
+      }
+      queue.push_back(' ');
     }
   }
+  for (unsigned int i = 0;i < queue.size();i++) {
+      cout << queue[i];
+  }
+  cout << endl;
 }
 
 
@@ -71,7 +75,7 @@ int main(int argc, char *argv[])
     // }
     // cout << endl;
     vector<char>::iterator it = letters.begin();
-    while(*it){
+    while(it != letters.end()){
       if(*it == ' ' || *it == '\n'){
         it++;
       }
@@ -83,7 +87,6 @@ int main(int argc, char *argv[])
         }
         words.push_back(s);
       }
-      it++;
     }
 
     for (unsigned int i = 0; i < words.size();i++) {
@@ -94,12 +97,9 @@ int main(int argc, char *argv[])
       for(int i = 0; i < N_WORDS; i++){
         s = s + words[i];
       }
-      key.push_back(s);
+      cout << s << endl;
       words.erase(words.begin());
-    }
-    //
-    for (unsigned int i = 0; i < key.size();i++) {
-        cout << i <<". " << key[i] << endl;
+      key.push_back(s);
     }
 
 
