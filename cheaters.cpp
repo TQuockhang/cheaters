@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "hash.h"
 
 using namespace std;
 int getdir (string dir, vector<string> &files);
@@ -15,16 +16,30 @@ void convertToKey( vector<string>& queue, vector<string>& output, int num);
 
 int main(int argc, char *argv[])
 {
+    Hash h;
     string dir = argv[1];
     const int N_WORDS = atoi(argv[2]);
+    // const int FILTER = atoi(argv[3]);
     vector<string> files = vector<string>();
     vector<string> words;
     vector<string> key;
 
     getdir(dir,files);
-    string path = dir + "/" + files[0];
+    string path = dir + "/" + files[1];
+
     GetWords(path.c_str(), words);
     convertToKey(words, key, N_WORDS);
+
+    // insert keys
+
+    //new forloop
+    //count collions
+
+    for(int i = 0; i < key.size(); i++){
+      //cout << i << ". " << key[i] << endl;
+       h.insert(files[1], key[i]);
+    }
+    cout << h.collions;
 
     return 0;
 }
