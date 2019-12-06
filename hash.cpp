@@ -89,3 +89,20 @@ void Hash::remove(int index){
   array[index] = array[index]->next;
   delete temp;
 }
+
+Hash::~Hash(){
+  for(int i = 0; i < SIZE; i++){
+    if(array[i] == NULL){
+    }
+    else{
+      HashTable *ptr = array[i];
+      while(ptr != NULL){
+        HashTable *temp = ptr;
+        ptr = ptr->next;
+        delete temp;
+      }
+      array[i] = ptr;
+    }
+
+  }
+}
