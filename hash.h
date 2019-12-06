@@ -17,10 +17,11 @@ class Hash{
    typedef struct HashTable
     {
        int fIndex;
+       std::string key;
        HashTable *next;
     }HashTable;
 
-    unsigned int hashFunction( const std::string& s);
+    int hashFunction( const std::string& s);
 
     static const int SIZE = 24593;
     HashTable* array[SIZE];

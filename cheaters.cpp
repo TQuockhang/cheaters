@@ -19,13 +19,13 @@ int main(int argc, char *argv[])
     const int N_WORDS = atoi(argv[2]);
     const int FILTER = atoi(argv[3]);
     vector<string> files = vector<string>();
-    vector<string> words;
-    vector<string> key;
 
     getdir(dir,files);
 
 
     for(int i = 0; i < files.size(); i++){
+      vector<string> words;
+      vector<string> key;
       string path = dir + "/" + files[i];
       // cout << path << endl;
 
@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
         // cout << i;
          h.insert(i, key[c]);
       }
-
+      key.clear();
+      words.clear();
     }
     h.findCollisions(files, FILTER);
 

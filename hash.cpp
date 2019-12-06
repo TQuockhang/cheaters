@@ -17,25 +17,30 @@ Hash::Hash(){
 }
 
 void Hash::insert(int index, const std::string& key){
-  unsigned int location = hashFunction(key);
+ int location = hashFunction(key);
   if(array[(int)location]  == NULL){
     Hash::HashTable *temp = new Hash::HashTable;
     temp->fIndex = index;
+    temp->key = key;
     temp->next = NULL;
     array[location] = temp;
   }
   else{
     if((array[location]->fIndex) != index){
+      // if(array[location]->key == key){
+      //   cout << array[location] <<" key inserted:" << key << " key inside" << array[location] ->key << endl;
+      // }
       Hash::HashTable *temp = new Hash::HashTable;
       temp->fIndex = index;
       temp->next = array[location];
+      temp->key = key;
       array[location] = temp;
     }
   }
 }
 
 
-unsigned int Hash::hashFunction(const std::string& key){
+ int Hash::hashFunction(const std::string& key){
   unsigned int hash = 0;
   for(int i = 0; i < key.length(); i++){
     hash +=( ((key[key.length() - i - 1]) * pow(3,i)));
@@ -58,7 +63,7 @@ Hash::HashTable* ptr1;
     if(array[i] != NULL){
       // ptr1 = ptr1->next;
         while(array[i]->next != NULL){
-          while(ptr1 != NULL){
+          while(ptr1 != NULL){;
             matrix[array[i]->fIndex][ptr1->fIndex]++;
             ptr1 = ptr1->next;
           }
