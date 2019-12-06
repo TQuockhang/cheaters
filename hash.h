@@ -10,21 +10,22 @@ class Hash{
     int collions = 0;
 
     Hash();
-    void insert(std::string fileName, std::string key);
-    // int findCollisions(std::vector<std::string> fileName, std::vector<std::string> key, std::vector<std::string> fileName2);
+    void insert(int index,const std::string & key);
+    void findCollisions(std::vector<std::string>const & fileName, int tolerance);
+
   private:
    typedef struct HashTable
     {
-       std::string fileName;
+       int fIndex;
        HashTable *next;
     }HashTable;
 
-    int hashFunction(std::string s);
+    unsigned int hashFunction( const std::string& s);
 
-    static const int PRIME = 1;
-    static const int SIZE = 12289;
+    static const int SIZE = 24593;
     HashTable* array[SIZE];
-    int power (int val, int exp);
+    void remove(int index);
+
 
 };
 

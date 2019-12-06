@@ -12,34 +12,35 @@ int getdir (string dir, vector<string> &files);
 void GetWords(const char *fName, vector<string>& queue);
 void convertToKey( vector<string>& queue, vector<string>& output, int num);
 
-
-
 int main(int argc, char *argv[])
 {
     Hash h;
     string dir = argv[1];
     const int N_WORDS = atoi(argv[2]);
-    // const int FILTER = atoi(argv[3]);
+    const int FILTER = atoi(argv[3]);
     vector<string> files = vector<string>();
     vector<string> words;
     vector<string> key;
 
     getdir(dir,files);
-    string path = dir + "/" + files[1];
 
-    GetWords(path.c_str(), words);
-    convertToKey(words, key, N_WORDS);
 
-    // insert keys
+    for(int i = 0; i < files.size(); i++){
+      string path = dir + "/" + files[i];
+      // cout << path << endl;
 
-    //new forloop
-    //count collions
+      GetWords(path.c_str(), words);
+      convertToKey(words, key, N_WORDS);
 
-    for(int i = 0; i < key.size(); i++){
-      //cout << i << ". " << key[i] << endl;
-       h.insert(files[1], key[i]);
+      for(int c = 0; c < key.size(); c++){
+        // cout << i;
+         h.insert(i, key[c]);
+      }
+
     }
-    cout << h.collions;
+    h.findCollisions(files, FILTER);
+
+
 
     return 0;
 }
@@ -89,6 +90,7 @@ void GetWords(const char *fName, vector<string>& queue){
 }
 
 void convertToKey(vector<string>& queue, vector<string>& output, int num){
+
   while (queue.size() >= num){
     string s;
     for(int i = 0; i < num; i++){

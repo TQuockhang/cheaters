@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include "hash.h"
+#include <cmath>
 
 using namespace std;
 
@@ -15,50 +16,71 @@ Hash::Hash(){
   }
 }
 
-void Hash::insert(std::string fileName, std::string key){
-  Hash::HashTable *temp = new Hash::HashTable;
-  temp->fileName = fileName;
-  temp->next = NULL;
-  int location = hashFunction(key);
-  if(array[location]  == NULL){
+void Hash::insert(int index, const std::string& key){
+  unsigned int location = hashFunction(key);
+  if(array[(int)location]  == NULL){
+    Hash::HashTable *temp = new Hash::HashTable;
+    temp->fIndex = index;
+    temp->next = NULL;
     array[location] = temp;
   }
   else{
-    if(!(array[location]->fName == fileName)){
-      temp->next = array [location];
+    if((array[location]->fIndex) != index){
+      Hash::HashTable *temp = new Hash::HashTable;
+      temp->fIndex = index;
+      temp->next = array[location];
       array[location] = temp;
     }
-    else{
-      cout << "so close yet so far" << endl;
-      collions +=1;
-      //exit(41);
-    }
   }
 }
 
 
-int Hash::hashFunction(std::string key){
-  int hash = 0;
-  const char* letters = key.c_str();
-  int c = 0;
-  for(int i = 0; i < key.size() ; i++){
-  //  cout << i << ". "<< letters[i] << endl;
-    hash += ((letters[key.size() - i - 1]) - 65)* ( ( ( (power(5, i)/power( 3, i)) )  ) % SIZE )   ;
+unsigned int Hash::hashFunction(const std::string& key){
+  unsigned int hash = 0;
+  for(int i = 0; i < key.length(); i++){
+    hash +=( ((key[key.length() - i - 1]) * pow(3,i)));
   }
-  hash = hash % SIZE ;
-  cout << hash << endl;
-
-  if (hash > SIZE || hash < 0){
-    cout << "error bounds" << endl;
-    cout << key.size() << endl;
-    exit(42);
-  }
-  // cout << hash << endl;
+  hash = hash%SIZE;
   return hash;
 }
-int Hash::power (int val, int exp){
-  if(exp == 0){
-    return 1;
+
+void Hash::findCollisions(vector<string>const & fileName, int tolerance){
+  int matrix[fileName.size()][fileName.size()];
+   for ( int i = 0 ; i < fileName.size() ; i++ ){
+     for ( int j = 0 ; j < fileName.size() ; j++ ){
+        matrix[i][j] = 0;
+      }
+    }
+Hash::HashTable* ptr1;
+  for(int i = 0; i < SIZE; i++){
+    ptr1 = array[i];
+
+    if(array[i] != NULL){
+      // ptr1 = ptr1->next;
+        while(array[i]->next != NULL){
+          while(ptr1 != NULL){
+            matrix[array[i]->fIndex][ptr1->fIndex]++;
+            ptr1 = ptr1->next;
+          }
+          remove(i);
+          ptr1 = array[i];
+        }
+
+    }
+
   }
-  return (val * power(val, exp-1)) ;
+  for(int i = 0; i < fileName.size(); i++){
+    for(int j = i+ 1; j < fileName.size(); j++){
+      if(matrix[j][i] >= tolerance){
+        cout <<  matrix[j][i] << " " << fileName[i] << ", " << fileName[j] << endl;
+      }
+    }
+  }
+
+}
+
+void Hash::remove(int index){
+  HashTable* temp = array[index];
+  array[index] = array[index]->next;
+  delete temp;
 }
